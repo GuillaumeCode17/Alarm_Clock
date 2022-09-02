@@ -6,7 +6,7 @@ from tkinter import messagebox
 from pygame import mixer
 
 root = Tk()
-root.title("YTD(-Youtube-) 📺 Downloader 📺")
+root.title("Alarm Clock Version 1 Beta")
 root.geometry("700x900")  # set window
 root.columnconfigure(0, weight=1)  # set all content in center.
 root.config(background="black")
