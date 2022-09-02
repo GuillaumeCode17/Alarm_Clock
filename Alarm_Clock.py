@@ -28,7 +28,8 @@ def clock():
 def th():
     t1 = threading.Thread(target=a, args=())
     t1.start()
-    
+
+
 def a():
     a = AlarmSet.get()
     if a == "":
@@ -37,6 +38,7 @@ def a():
     else:
         Alarmtime = a
         CurrentTime = time.strftime("%H:%M")
+        SetTime.config(bg="green")
 
         while Alarmtime != CurrentTime:
             CurrentTime = time.strftime("%H:%M")
@@ -47,6 +49,7 @@ def a():
             msg = messagebox.showinfo('It is time', f'{amsg.get()}')
             if msg == 'ok':
                 mixer.music.stop()
+                SetTime.config(bg="red")
 
 
 # Labels Zone ==========================================================|
@@ -85,9 +88,9 @@ try:  # Current Time Label and # developer Label
     current_time.grid(row=1, column=0, pady=10)
 
     # developer Label
-    developerlabel = Label(root, text="This App was build by Guillaume", font=(
-        "jost", 15), bg="black", fg="white", padx=10, pady=5)
-    developerlabel.grid(row=12, column=0, padx=10, pady=10)
+    developerlabel = Label(root, text="This App was build by Guillaume.\n\n Made WIth Python3", font=(
+        "jost", 14), bg="black", fg="white", padx=10, pady=5)
+    developerlabel.grid(row=12, column=0, padx=10, pady=(100, 10))
 except:
     pass
 
