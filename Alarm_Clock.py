@@ -18,19 +18,19 @@ mixer.init()
 Current_Alarm_State = True
 
 
-def clock():
+def clock():  # Simple Clock Function
     clock_time = time.strftime("%H:%M:%S %p")
     current_time.config(
         text=f"Current Time : {clock_time}", font="Times 17")
     current_time.after(500, clock)
 
 
-def th():
+def th():  # Set Alarm Function into Threading
     t1 = threading.Thread(target=a, args=())
     t1.start()
 
 
-def a():
+def a():  # Set Alarm Function
     Current_Alarm_State = False
     AlarmTime = ""
     a = AlarmSet.get()
