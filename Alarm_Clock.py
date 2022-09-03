@@ -23,7 +23,7 @@ except:
 # Functions Zone =======================================================|
 
 
-def motion(event):  # Function To Track Mouse Position for Devloppement only
+# def motion(event):  # Function To Track Mouse Position for Devloppement only
     x, y = event.x, event.y
     print('{}, {}'.format(x, y))
 
@@ -47,20 +47,20 @@ def clock():  # Simple Clock Function
     current_time.after(500, clock)
 
 
-def th():  # Set Alarm Function into Threading
-    t1 = threading.Thread(target=a, args=())
+def ThreadingThis():  # Set Alarm Function into Threading
+    t1 = threading.Thread(target=SetAlarmTime, args=())
     t1.start()
 
 
-def a():  # Set Alarm Function
+def SetAlarmTime():  # Set Alarm Function
     Current_Alarm_State = False
     AlarmTime = ""
-    a = (HourSet.get()+":"+MinuteSet.get()+":"+SecondSet.get())
-    if a == "":
+    Time_Set = (HourSet.get()+":"+MinuteSet.get()+":"+SecondSet.get())
+    if Time_Set == "":
         msg = messagebox.showerror(
             'Invalid data', 'Please enter valid time | Example ( 15:45 )')
     else:
-        AlarmTime = a
+        AlarmTime = Time_Set
         CurrentTime = time.strftime("%H:%M:%S %p")
         SetTime.config(bg="green")
         AlarmSetLabel.config(text="Time's Set to : \n" +
@@ -100,7 +100,7 @@ except:
 
 # btn to set alarm time
 SetTime = Button(root, width=10, bg="red", fg="white",
-                 text="Set Time", command=th, padx=10, pady=5, cursor="hand2")
+                 text="Set Time", command=ThreadingThis, padx=10, pady=5, cursor="hand2")
 SetTime.grid(row=5, column=0, padx=10, pady=10)
 
 AlarmSetLabelMsg = Label(root, text="Enter Alarm's Time \n Format e.g. \n(15:45:15) = 15 Heures 45 Minutes and 15 Secondes",
@@ -149,5 +149,5 @@ except:
 
 Only_Two_Entry()
 clock()
-root.bind('<Motion>', motion)
+# root.bind('<Motion>', motion)
 root.mainloop()
