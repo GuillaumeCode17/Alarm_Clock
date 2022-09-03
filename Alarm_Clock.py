@@ -5,17 +5,39 @@ from tkinter import Tk
 from tkinter import messagebox
 from pygame import mixer
 
-root = Tk()
-root.title("Alarm Clock Version 1 Beta")
-root.geometry("700x900")  # set window
-root.columnconfigure(0, weight=1)  # set all content in center.
-root.config(background="black")
-# root.iconbitmap("Youtube.ico")
-root.resizable(False, False)
-width = root.winfo_screenwidth()
-height = root.winfo_screenheight()
-mixer.init()
-Current_Alarm_State = True
+try:  # Initialization of the labels ( root=Tk... )
+    root = Tk()
+    root.title("Alarm Clock Version 1 Beta")
+    root.geometry("700x900")  # set window
+    root.columnconfigure(0, weight=1)  # set all content in center.
+    root.config(background="black")
+    # root.iconbitmap("Youtube.ico")
+    root.resizable(False, False)
+    width = root.winfo_screenwidth()
+    height = root.winfo_screenheight()
+    mixer.init()
+    Current_Alarm_State = True
+except:
+    pass
+
+# Functions Zone =======================================================|
+
+
+def motion(event):  # Function To Track Mouse Position for Devloppement only
+    x, y = event.x, event.y
+    print('{}, {}'.format(x, y))
+
+
+def Only_Two_Entry():  # Only two entry function for the Alarm's time setup
+    if len(HourSet.get()) > 1:
+        HourSet.delete(2, END)
+
+    if len(MinuteSet.get()) > 1:
+        MinuteSet.delete(2, END)
+
+    if len(SecondSet.get()) > 1:
+        SecondSet.delete(2, END)
+    root.after(200, Only_Two_Entry)
 
 
 def clock():  # Simple Clock Function
@@ -33,13 +55,13 @@ def th():  # Set Alarm Function into Threading
 def a():  # Set Alarm Function
     Current_Alarm_State = False
     AlarmTime = ""
-    a = AlarmSet.get()
+    a = (HourSet.get()+":"+MinuteSet.get()+":"+SecondSet.get())
     if a == "":
         msg = messagebox.showerror(
             'Invalid data', 'Please enter valid time | Example ( 15:45 )')
     else:
         AlarmTime = a
-        CurrentTime = time.strftime("%H:%M")
+        CurrentTime = time.strftime("%H:%M:%S %p")
         SetTime.config(bg="green")
         AlarmSetLabel.config(text="Time's Set to : \n" +
                              AlarmTime+" ⏰", fg="green")
@@ -47,25 +69,23 @@ def a():  # Set Alarm Function
 
         if AlarmTime != CurrentTime:
             while Current_Alarm_State:
-                CurrentTime = time.strftime("%H:%M")
+                CurrentTime = time.strftime("%H:%M:%S")
                 if AlarmTime == CurrentTime:
                     mixer.music.load("./Alarm01.mp3")
                     mixer.music.play(loops=2)
-                    msg = messagebox.showinfo('It is time', f'{amsg.get()}')
+                    msg = messagebox.showinfo('Time is up !', f'{amsg.get()}')
                     if msg == 'ok':
                         mixer.music.stop()
                         SetTime.config(bg="red")
                         AlarmSetLabel.config(text="")
                         Current_Alarm_State = False
 
+
 # Labels Zone ==========================================================|
-
-
 # Top Image
 first_img = PhotoImage(file="./Images/Alarm01.png")
 my_img = Label(root, image=first_img, width=800, height=300, bg="black")
 my_img.grid(row=0, column=0, pady=(10, 0), padx=5)
-
 
 try:  # Pop up confirmation alarm warning
     amessage = Label(root, text="Message", font=(
@@ -78,26 +98,41 @@ try:  # Pop up confirmation alarm warning
 except:
     pass
 
-
 # btn to set alarm time
 SetTime = Button(root, width=10, bg="red", fg="white",
                  text="Set Time", command=th, padx=10, pady=5, cursor="hand2")
 SetTime.grid(row=5, column=0, padx=10, pady=10)
 
-
-AlarmSetLabelMsg = Label(root, text="Enter Alarm's Time \n Format e.g. (15:45) = 3h00PM",
+AlarmSetLabelMsg = Label(root, text="Enter Alarm's Time \n Format e.g. \n(15:45:15) = 15 Heures 45 Minutes and 15 Secondes",
                          fg="white", font=("Times", 20), bg="black")
-AlarmSetLabelMsg.grid(row=6, column=0, pady=10)
+AlarmSetLabelMsg.grid(row=8, column=0, pady=10)
 
-AlarmSet = Entry(root, insertbackground="white", font=("comic sans", 20),
-                 width=5, bg="black", fg="white", border=10)
-AlarmSet.grid(row=7, column=0, padx=10, pady=10)
+try:  # Alarm Time Set by User
+    HourSet = Entry(root, insertbackground="white", font=("comic sans", 20),
+                    width=2, bg="black", fg="white", border=10)
+    HourSet.place(x=202, y=665)
 
+    TwoPointsLabel = Label(root, text=':', fg="red",
+                           font=("comic sans", 20), bg="black")
+    TwoPointsLabel.place(x=282, y=670)
+
+    MinuteSet = Entry(root, insertbackground="white", font=("comic sans", 20),
+                      width=2, bg="black", fg="white", border=10)
+    MinuteSet.place(x=322, y=665)
+
+    TwoPointsLabel = Label(root, text=':', fg="red",
+                           font=("comic sans", 20), bg="black")
+    TwoPointsLabel.place(x=402, y=670)
+
+    SecondSet = Entry(root, insertbackground="white", font=("comic sans", 20),
+                      width=2, bg="black", fg="white", border=10)
+    SecondSet.place(x=442, y=665)
+except:
+    pass
 
 AlarmSetLabel = Label(root, text="", bg="black",
                       fg="white", font=("Times", 20))
-AlarmSetLabel.grid(row=8, column=0, pady=10)
-
+AlarmSetLabel.place(x=510, y=430)
 
 try:  # Current Time Label and # developer Label
     # Current Time Label
@@ -112,5 +147,7 @@ try:  # Current Time Label and # developer Label
 except:
     pass
 
+Only_Two_Entry()
 clock()
+root.bind('<Motion>', motion)
 root.mainloop()
